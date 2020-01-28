@@ -12,8 +12,8 @@ import requests
 class Display:
     
     api_key = 'jIiLXX4cdVX7VVH56LSFk66IiYm1'
-    statListBat = ['No. Of Matches : ', 'Total Runs : ', 'Batting Average : ', 'Strike Rate : ', 'Highest Score : ']
-    statListBowl = ['No. Of Matches : ', 'Total Wickets : ', 'Bowling Average : ', 'Strike Rate : ', 'Best Bowling : ']
+    statListBat = {'Mat':'No. Of Matches', 'Runs':'Total Runs', 'Ave':'Batting Average', 'SR':'Strike Rate', 'HS':'Highest Score'}
+    statListBowl = {'Mat':'No. Of Matches', 'Wkts':'Total Wickets', 'Ave':'Bowling Average', 'Econ':'Economy', 'BBI':'Best Bowling'}
     
     def __init__(self,root):
         self.canvas = tk.Canvas(root)
@@ -39,9 +39,9 @@ class Display:
         self.getData = tk.Button(self.frame1, text='Get Stats', bg='white', command=lambda: self.getPlayingRole(self.entry.get()))
         self.getData.place(relx=0.85,rely=0,relheight=1,relwidth=0.15)
         
-        self.label1 = tk.Label(self.frame2, anchor='nw',justify='left',bg='white')
+        self.label1 = tk.Label(self.frame2, anchor='nw',justify='left',bg='white',font=('italica', 18))
         self.label1.place(relx=0, rely=0, relheight=1, relwidth=0.49)
-        self.label2 = tk.Label(self.frame2, anchor='nw',justify='left',bg='white')
+        self.label2 = tk.Label(self.frame2, anchor='nw',justify='left',bg='white',font=('italica', 18))
         self.label2.place(relx=0.51, rely=0, relheight=1, relwidth=0.49)
         
         
@@ -84,17 +84,32 @@ class Display:
      
         
     def getBattingstats(self, playerInfo):
-        print (playerInfo['batting']['ODIs']) 
-                
+        str1='ODIs\n\n'
+        for key, value in Display.statListBat.items():
+            str1 = str1 + ((Display.statListBat[key] + ': '+ playerInfo['batting']['ODIs'][key]+'\n'))
+        self.label1['text'] = str1        
         
-
+        str2='TESTS\n\n'
+        for key, value in Display.statListBat.items():
+            str2 = str2 + ((Display.statListBat[key] + ': '+ playerInfo['batting']['tests'][key]+'\n'))
+        self.label2['text'] = str2  
+        
+        
     def getBowlingstats(self, playerInfo):        
-        print (playerInfo['bowling'])  
+        str1='ODIs\n\n'
+        for key, value in Display.statListBowl.items():
+            str1 = str1 + ((Display.statListBowl[key] + ': '+ playerInfo['bowling']['ODIs'][key]+'\n'))
+        self.label1['text'] = str1        
+        
+        str2='TESTS\n\n'
+        for key, value in Display.statListBowl.items():
+            str2 = str2 + ((Display.statListBowl[key] + ': '+ playerInfo['bowling']['tests'][key]+'\n'))
+        self.label2['text'] = str2 
        
        
 root = tk.Tk()
-x=int(root.winfo_screenwidth()*0.6)
-y=int(root.winfo_screenheight()*0.7)
+x=int(root.winfo_screenwidth()*0.5)
+y=int(root.winfo_screenheight()*0.6)
 z = str(x) +'x'+str(y)
 root.geometry(z)
 root.title('Test and ODI stats')
